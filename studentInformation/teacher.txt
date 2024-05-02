@@ -1,0 +1,153 @@
+}package program;
+
+import java.util.ArrayList;
+
+class Teacher extends Administrator {
+    public Teacher(String username, String password) {
+        super(username, password);
+    }
+
+    public void displayStudentMarks(ArrayList<Course> courses, String studentId) {
+        System.out.println("\nStudent Marks for Courses:");
+        for (Course course : courses) {
+            course.displayStudentMarks(studentId);
+        }
+    }
+
+    public void addMarks(ArrayList<Course> courses, String courseCode, String studentId, double assignment, double test1, double test2, double project, double midTerm, double finalTerm) {
+        for (Course course : courses) {
+            if (course.getCourseCode().equals(courseCode)) {
+                course.addStudentMarks(studentId, assignment, test1, test2, project, midTerm, finalTerm);
+                System.out.println("Marks added successfully!");
+                return;
+            }
+        }
+        System.out.println("Course not found!");
+    }
+
+    public void displayCourseList(ArrayList<Course> courses) {
+        System.out.println("\nCourse List:");
+        System.out.format("%-15s%-25s%-5s%-20s%-8s%-8s%-8s%-8s%-8s%-8s%-10s%-10s%-8s%n", 
+                "Course Code", "Course Title", "ECTS", "Instructor", "Assignment", "Test 1", "Test 2", "Project", "Midterm", "Finalterm", "Grade", "EQ", "Grade");
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------");
+        double totalMarks = 0;
+        double totalEQ = 0;
+        double totalCredits = 0;
+        for (Course course : courses) {
+            // Calculate total mark
+            double totalMark = course.getAssignment() + course.getTest1() + course.getTest2() +
+                               course.getProject() + course.getMidTerm() + course.getFinalTerm();
+            
+            // Calculate grade point
+            double gradePoint = calculateGradePoint((int)totalMark);
+            
+            // Calculate equivalent grade (EQ)
+            double eq = gradePoint;
+            totalEQ += eq;
+
+            // Calculate total marks
+            totalMarks += totalMark;
+
+            // Calculate semester GPA
+            double semesterGPA = totalMarks / courses.size();
+
+            // Calculate cumulative GPA
+            totalCredits += course.getECTS();
+            double cumulativeGPA = totalEQ / totalCredits;
+
+            // Calculate grade number
+            int gradeNumber = calculateGradeNumber(semesterGPA);
+
+            // Calculate grade character
+            char gradeCharacter = calculateGradeCharacter(gradeNumber);
+
+            System.out.format("%-15s%-25s%-5d%-20s%-8.2f%-8.2f%-8.2f%-8.2f%-8.2f%-8.2f%-10d%-10.2f%-8c%n",
+                    course.getCourseCode(), course.getCourseTitle(), course.getECTS(), course.getInstructorName(),
+                    course.getAssignment(), course.getTest1(), course.getTest2(), course.getProject(), 
+                    course.getMidTerm(), course.getFinalTerm(), (int)totalMark, eq, gradeCharacter);
+        }
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("Total Marks: " + totalMarks);
+        System.out.println("Semester GPA: " + (totalMarks / courses.size()));
+        System.out.println("Cumulative GPA: " + (totalEQ / totalCredits));
+    }
+
+    // Define methods to calculate grade number, grade character, and grade point
+    private int calculateGradeNumber(double semesterGPA) {
+        if (semesterGPA >= 4.0) {
+            return 10;
+        } else if (semesterGPA >= 3.5) {
+            return 9;
+        } else if (semesterGPA >= 3.0) {
+            return 8;
+        } else if (semesterGPA >= 2.5) {
+            return 7;
+        } else if (semesterGPA >= 2.0) {
+            return 6;
+        } else if (semesterGPA >= 1.5) {
+            return 5;
+        } else if (semesterGPA >= 1.0) {
+            return 4;
+        } else {
+            return 0;
+        }
+    }
+
+    private char calculateGradeCharacter(int gradeNumber) {
+        switch (gradeNumber) {
+            case 10:
+                return 'A';
+            case 9:
+                return 'B';
+            case 8:
+                return 'C';
+            case 7:
+                return 'D';
+            case 6:
+                return 'E';
+            case 5:
+                return 'P';
+            case 4:
+                return 'F';
+            default:
+                return 'X'; // 'X' indicates failure or incomplete
+        }
+    }
+
+    private double calculateGradePoint(int mark) {
+        if (mark >= 90) {
+            return 4.0;
+        } else if (mark >= 80) {
+            return 3.5;
+        } else if (mark >= 70) {
+            return 3.0;
+        } else if (mark >= 60) {
+            return 2.5;
+        } else if (mark >= 50) {
+            return 2.0;
+        } else if (mark >= 40) {
+            return 1.5;
+        } else if (mark >= 30) {
+            return 1.0;
+        } else {
+            return 0.0;
+        }
+    }
+
+
+    // Define methods to calculate grade, grade character, and EQ
+    private double calculateGrade(double totalMark) {
+		return totalMark;
+        // Your logic to calculate grade based on total mark
+    }
+
+    private char calculateGradeCharacter(double grade) {
+		return 0;
+        // Your logic to convert grade to grade character
+    }
+
+    private double calculateEQ(double grade) {
+		return grade;
+        // Your logic to calculate equivalent grade
+    }
+}

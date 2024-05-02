@@ -1,0 +1,43 @@
+package program;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.Scanner;
+
+class Curriculum {
+    private HashMap<String, CourseDetails> courses;
+
+    public Curriculum() {
+        this.courses = new HashMap<>();
+        // Add more courses as needed
+        courses.put("CS101", new CourseDetails("Numerical analysis", 5));
+        courses.put("CS102", new CourseDetails("Data Structures", 5));
+        courses.put("CS103", new CourseDetails("Algorithms", 5));
+        courses.put("CS104", new CourseDetails("Object-Oriented Programming", 5));
+        courses.put("CS105", new CourseDetails("Software Engineering", 5));
+        courses.put("CS106", new CourseDetails("Databases", 5));
+    }
+
+    public CourseDetails getCourseDetails(String courseCode) {
+        return courses.get(courseCode);
+    }
+}
+
+class CourseDetails {
+    private String title;
+    private int ects;
+
+    public CourseDetails(String title, int ects) {
+        this.title = title;
+        this.ects = ects;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getEcts() {
+        return ects;
+    }
+}

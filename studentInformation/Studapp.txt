@@ -1,0 +1,234 @@
+package program;
+
+import java.util.ArrayList;
+import java.security.SecureRandom;
+import java.util.Scanner;
+
+public class studapp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Student> students = new ArrayList<>();
+        ArrayList<Course> courses = new ArrayList<>();
+        Administrator administrator = new Administrator("admin", "adminpass");
+        Teacher teacher = new Teacher("teacher", "teacherpass");
+
+        int userChoice;
+        do {
+            System.out.println("\nUser Type Selection:");
+            System.out.println("1. Administrator");
+            System.out.println("2. Teacher");
+            System.out.println("3. Student");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            userChoice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (userChoice) {
+                case 1:
+                    System.out.print("Enter administrator username: ");
+                    String adminUsername = scanner.nextLine();
+                    System.out.print("Enter administrator password: ");
+                    String adminPassword = scanner.nextLine();
+
+                    if (administrator.login(adminUsername, adminPassword)) {
+                        System.out.println("\nAdministrator login successful. Welcome, " + adminUsername + "!");
+                        int adminChoice;
+                        do {
+                            System.out.println("\nAdministrator Menu:");
+                            System.out.println("1. Add Student");
+                            System.out.println("2. Show Student Information");
+                            System.out.println("3. Add Course");
+                            System.out.println("4. Show Course List");
+                            System.out.println("5. Logout");
+                            System.out.print("Enter your choice: ");
+                            adminChoice = scanner.nextInt();
+                            scanner.nextLine();
+
+                            switch (adminChoice) {
+                                case 1:
+                                    try {
+                                        System.out.print("Enter student name: ");
+                                        String name = scanner.nextLine();
+                                        System.out.print("Enter student ID: ");
+                                        String studentId = scanner.nextLine();
+                                        System.out.print("Enter student year: ");
+                                        String year = scanner.nextLine();
+                                        System.out.print("Enter student department: ");
+                                        String department = scanner.nextLine();
+
+                                        administrator.registerStudent(students, name, studentId, year, department);
+                                    } catch (Exception e) {
+                                        System.out.println("Error: " + e.getMessage());
+                                    }
+                                    break;
+
+                                case 2:
+                                    administrator.showStudentInformation(students);
+                                    break;
+
+                                case 3:
+                                	System.out.print("Enter course code: ");
+                                    String courseCode = scanner.nextLine();
+                                    System.out.print("Enter instructor name: ");
+                                    String instructorName = scanner.nextLine();
+
+                                    administrator.addCourse(courses, courseCode, instructorName);
+                                    break;
+
+                                case 4:
+                                    administrator.displayCourseList(courses);
+                                    break;
+
+                                case 5:
+                                    System.out.println("Administrator logout. Returning to User Type Selection.");
+                                    break;
+
+                                default:
+                                    System.out.println("Invalid choice. Please enter a valid option.");
+                                    break;
+                            }
+
+                        } while (adminChoice != 5);
+
+                    } else {
+                        System.out.println("Invalid administrator credentials.");
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Enter teacher username: ");
+                    String teacherUsername = scanner.nextLine();
+                    System.out.print("Enter teacher password: ");
+                    String teacherPassword = scanner.nextLine();
+
+                    if (teacher.login(teacherUsername, teacherPassword)) {
+                        System.out.println("\nTeacher login successful. Welcome, " + teacherUsername + "!");
+                        int teacherChoice;
+                        do {
+                            System.out.println("\nTeacher Menu:");
+                            System.out.println("1. Add Marks");
+                            System.out.println("2. Show Course List");
+                            System.out.println("3. Logout");
+                            System.out.print("Enter your choice: ");
+                            teacherChoice = scanner.nextInt();
+                            scanner.nextLine();
+
+                            switch (teacherChoice) {
+                                case 1:
+                                    try {
+                                        System.out.print("Enter course code: ");
+                                        String courseCode = scanner.nextLine();
+                                        System.out.print("Enter student ID: ");
+                                        String studentId = scanner.nextLine();
+                                        System.out.print("Enter Assignment marks: ");
+                                        double assignment = scanner.nextDouble();
+                                        System.out.print("Enter Test 1 marks: ");
+                                        double test1 = scanner.nextDouble();
+                                        System.out.print("Enter Test 2 marks: ");
+                                        double test2 = scanner.nextDouble();
+                                        System.out.print("Enter Project marks: ");
+                                        double project = scanner.nextDouble();
+                                        System.out.print("Enter Mid-term Exam marks: ");
+                                        double midTerm = scanner.nextDouble();
+                                        System.out.print("Enter Final-term Exam marks: ");
+                                        double finalTerm = scanner.nextDouble();
+
+                                        teacher.addMarks(courses, courseCode, studentId, assignment, test1, test2, project, midTerm, finalTerm);
+                                    } catch (Exception e) {
+                                        System.out.println("Error: " + e.getMessage());
+                                    }
+                                    break;
+
+                                case 2:
+                                    teacher.displayCourseList(courses);
+                                    break;
+
+                                case 3:
+                                    System.out.println("Teacher logout. Returning to User Type Selection.");
+                                    break;
+
+                                default:
+                                    System.out.println("Invalid choice. Please enter a valid option.");
+                                    break;
+                            }
+
+                        } while (teacherChoice != 3);
+
+                    } else {
+                        System.out.println("Invalid teacher credentials.");
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("Enter student ID: ");
+                    String studentLoginId = scanner.nextLine();
+                    System.out.print("Enter student password: ");
+                    String studentLoginPassword = scanner.nextLine();
+
+                    boolean studentFound = false;
+                    Student loggedInStudent = null;
+                    for (Student student : students) {
+                        if (student.getStudentId().equals(studentLoginId) && student.getStudentPassword().equals(studentLoginPassword)) {
+                            studentFound = true;
+                            loggedInStudent = student;
+                            break;
+                        }
+                    }
+
+                    if (studentFound) {
+                        System.out.println("\nStudent login successful. Welcome, " + loggedInStudent.getName() + "!");
+                        int studentChoice;
+                        do {
+                            System.out.println("\nStudent Menu:");
+                            System.out.println("1. Display Information");
+                            System.out.println("2. Change Password");
+                            System.out.println("3. Course List");
+                            System.out.println("4. Logout");
+                            System.out.print("Enter your choice: ");
+                            studentChoice = scanner.nextInt();
+                            scanner.nextLine();
+
+                            switch (studentChoice) {
+                                case 1:
+                                    loggedInStudent.displayStudentInformation();
+                                    break;
+
+                                case 2:
+                                    System.out.print("Enter new password: ");
+                                    String newPassword = scanner.nextLine();
+                                    loggedInStudent.changePassword(newPassword);
+                                    break;
+
+                                case 3:
+                                    teacher.displayCourseList(courses);
+                                    break;
+
+                                case 4:
+                                    System.out.println("Student logout. Returning to User Type Selection.");
+                                    break;
+
+                                default:
+                                    System.out.println("Invalid choice. Please enter a valid option.");
+                                    break;
+                            }
+
+                        } while (studentChoice != 4);
+
+                    } else {
+                        System.out.println("Invalid student credentials.");
+                    }
+                    break;
+
+                case 4:
+                    System.out.println("Exiting the program. Goodbye!");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please enter a valid option.");
+                    break;
+            }
+
+        } while (userChoice != 4);
+
+        scanner.close();
+    }

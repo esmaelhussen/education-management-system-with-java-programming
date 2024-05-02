@@ -1,0 +1,14 @@
+package program;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class StudentInformation extends Student {
+    public StudentInformation(String name, String studentId, String year, String department, String studentPassword) {
+        super(name, studentId, year, department, studentPassword);
+    }
+}
+
+class InvalidNameException extends Exception {
+    public InvalidNameException(String message) {
+        super(message);
+    }

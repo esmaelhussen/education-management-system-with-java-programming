@@ -1,0 +1,79 @@
+package program;
+
+import java.util.ArrayList;
+import java.util.Random;
+import java.security.SecureRandom;
+import java.util.Scanner;
+import java.security.SecureRandom;
+
+class InvalidNameException extends Exception {
+    public InvalidNameException(String message) {
+        super(message);
+    }
+}
+class Administrator {
+    private String username;
+    private String password;
+    private Random random;
+    private Curriculum curriculum;
+
+    public Administrator(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.random = new Random();
+        this.curriculum = new Curriculum();
+    }
+
+    public boolean login(String enteredUsername, String enteredPassword) {
+        return username.equals(enteredUsername) && password.equals(enteredPassword);
+    }
+
+    public void registerStudent(ArrayList<Student> students, String name, String studentId, String year, String department) {
+        String studentPassword = generateRandomPassword();
+        Student student = new Student(name, studentId, year, department, studentPassword);
+        students.add(student);
+        System.out.println("Student registered successfully. Generated password: " + studentPassword);
+    }
+
+    private String generateRandomPassword() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&";
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            int index = random.nextInt(characters.length());
+            password.append(characters.charAt(index));
+        }
+        return password.toString();
+    }
+
+    public void showStudentInformation(ArrayList<Student> students) {
+        System.out.println("\nRegistered Students:");
+        for (Student student : students) {
+            System.out.println("Name: " + student.getName() + ", ID: " + student.getStudentId() +
+                    ", Year: " + student.getYear() + ", Department: " + student.getDepartment());
+        }
+    }
+
+    public void addCourse(ArrayList<Course> courses, String courseCode, String instructorName) {
+        CourseDetails courseDetails = curriculum.getCourseDetails(courseCode);
+        if (courseDetails != null) {
+            Course newCourse = new Course(courseCode, courseDetails.getTitle(), courseDetails.getEcts(), instructorName);
+            courses.add(newCourse);
+            System.out.println("Course added successfully!");
+        } else {
+            System.out.println("Invalid course code. Course not found in the curriculum.");
+        }
+    }
+
+    public void displayCourseList(ArrayList<Course> courses) {
+        System.out.println("\nCourse List:");
+        System.out.format("%-15s%-25s%-5s%-20s%n", "Course Code", "Course Title", "ECTS", "Instructor");
+        for (Course course : courses) {
+            System.out.format("%-15s%-25s%-5d%-20s%n", course.getCourseCode(), course.getCourseTitle(), course.getECTS(), course.getInstructorName());
+        }
+    }
+
+	public boolean login1(String adminUsername, String adminPassword) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+}
